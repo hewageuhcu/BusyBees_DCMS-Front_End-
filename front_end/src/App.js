@@ -1,11 +1,11 @@
 import logo from './logo.svg';
 import './App.css';
-import ApiService from './api_service'; 
+import ApiService from './children_service'; 
 import Children from './children';     
 function App() {
   return (
     <div>
-      <api_service />
+      <children_service />
       <children />
     </div>
   );
