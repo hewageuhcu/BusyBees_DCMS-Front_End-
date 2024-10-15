@@ -1,11 +1,15 @@
 import logo from './logo.svg';
 import './App.css';
-import api_service from './api_service';
-
+import ApiService from './api_service'; 
+import Children from './children';     
 function App() {
   return (
-    <api_service/>
+    <div>
+      <api_service />
+      <children />
+    </div>
   );
 }
 
 export default App;
+
