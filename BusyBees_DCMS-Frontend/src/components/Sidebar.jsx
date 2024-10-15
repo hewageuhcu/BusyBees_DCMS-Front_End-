@@ -35,7 +35,7 @@ function Sidebar() {
           Mathew
         </Typography>
         <Typography variant="body2" sx={{ color: '#8D939D' }}>
-          Designer
+          Admin
         </Typography>
       </Box>
       <Divider />
