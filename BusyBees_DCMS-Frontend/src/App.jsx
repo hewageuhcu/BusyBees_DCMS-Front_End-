@@ -6,6 +6,7 @@ import Header from './components/Header';
 import BabyDetails from './pages/BabyDetails';
 import BabySitterDetails from './pages/BabySitterDetails';
 import Dashboard from './pages/Dashboard';
+import LoginPage from './pages/LoginPage';
 import './App.css';
 
 function App() {
@@ -23,6 +24,7 @@ function App() {
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/babyDetails" element={<BabyDetails />} />
             <Route path="/babySitterDetails" element={<BabySitterDetails />} />
+            <Route path="/login" element={<LoginPage />} />
           </Routes>
         </Box>
       </Box>
