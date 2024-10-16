@@ -32,7 +32,7 @@ const LoginPage = () => {
             variant="h4"
             noWrap
             component="div"
-            sx={{ flexGrow: 1, color: '#FFFFFF', fontWeight: 'bold',width:40 }}
+            sx={{ flexGrow: 1, color: '#FFFFFF', fontWeight: 'bold',marginLeft:8, marginTop: 35,fontSize: 90 }}
           >
             BusyBees
           </Typography>
