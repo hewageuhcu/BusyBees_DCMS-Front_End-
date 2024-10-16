@@ -11,9 +11,15 @@ import './App.css';
 
 function App() {
   return (
+
+   
+  
     <Router>
+     
       <CssBaseline />
+  
       <Header />
+      
       <Box sx={{ display: 'flex', minHeight: '100vh' }}>
         <Sidebar />
         <Box
@@ -21,13 +27,17 @@ function App() {
           sx={{ flexGrow: 1, bgcolor: 'background.default', p: 3, mt: 8 }}
         >
           <Routes>
+     
+    <Route path="/login" element={<LoginPage />} />
+ 
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/babyDetails" element={<BabyDetails />} />
             <Route path="/babySitterDetails" element={<BabySitterDetails />} />
-            <Route path="/login" element={<LoginPage />} />
-          </Routes>
+            </Routes>
         </Box>
+   
       </Box>
+    
     </Router>
   );
 }
