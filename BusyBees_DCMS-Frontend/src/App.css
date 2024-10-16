@@ -11,7 +11,8 @@
 /* Login form */
 .login-form {
   max-width: 400px;
-  margin: 50px auto;
+  margin-top: 180px;
+  margin-left: 940px;
   padding: 20px;
   border: 1px solid #ccc;
   border-radius: 10px;
