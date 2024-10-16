@@ -15,14 +15,7 @@ const LoginPage = () => {
   return (
     <div className="container">
       {/* Sidebar */}
-      <div className="sidebar">
-        <ul>
-          <li>Home</li>
-          <li>About</li>
-          <li>Services</li>
-          <li>Contact</li>
-        </ul>
-      </div>
+   <div className="sidebar"></div>
 
       {/* Login Form */}
       <div className="login-form">
