@@ -1,6 +1,7 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { Box, Typography, TextField, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, TableSortLabel, Button, Dialog, DialogTitle, DialogContent, DialogActions } from '@mui/material';
+import { Box, Typography, TextField, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, TableSortLabel, Button, Dialog, DialogTitle, DialogContent, DialogActions, IconButton } from '@mui/material';
+import { Edit as EditIcon, Delete as DeleteIcon } from '@mui/icons-material';
 import NewBabyDetailsForm from '../components/NewBabyDetailsForm';
 
 const BabyDetails = () => {
@@ -9,8 +10,13 @@ const BabyDetails = () => {
   const [order, setOrder] = useState('asc');
   const [orderBy, setOrderBy] = useState('first_name');
   const [open, setOpen] = useState(false);
+  const [selectedChild, setSelectedChild] = useState(null);
 
   useEffect(() => {
+    fetchChildren();
+  }, []);
+
+  const fetchChildren = () => {
     axios.get('http://localhost:8080/children')
       .then(response => {
         setChildren(response.data);
@@ -19,7 +25,7 @@ const BabyDetails = () => {
       .catch(error => {
         console.error('Error fetching children:', error);
       });
-  }, []);
+  };
 
   const handleFilterByName = (event) => {
     setFilterName(event.target.value);
@@ -31,12 +37,28 @@ const BabyDetails = () => {
     setOrderBy(property);
   };
 
-  const handleClickOpen = () => {
+  const handleClickOpen = (child = null) => {
+    setSelectedChild(child);
     setOpen(true);
   };
 
   const handleClose = () => {
     setOpen(false);
+    setSelectedChild(null);
+  };
+const handleDelete = (id) => {
+  axios.delete(`http://localhost:8080/child?childId=${id}`)
+    .then(() => {
+      fetchChildren();
+    })
+    .catch(error => {
+      console.error('Error deleting child:', error);
+    });
+};
+
+  const handleSave = () => {
+    fetchChildren();
+    handleClose();
   };
 
   const filteredChildren = children.filter((child) =>
@@ -48,7 +70,7 @@ const BabyDetails = () => {
       <Typography variant="h4" gutterBottom>
         Baby Details
       </Typography>
-      <Button variant="contained" color="primary" onClick={handleClickOpen} sx={{ mb: 2 }}>
+      <Button variant="contained" color="primary" onClick={() => handleClickOpen()} sx={{ mb: 2 }}>
         Add New Baby Details
       </Button>
       <TextField
@@ -100,6 +122,7 @@ const BabyDetails = () => {
               </TableCell>
               <TableCell>Date of Birth</TableCell>
               <TableCell>Address</TableCell>
+              <TableCell>Actions</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -110,6 +133,14 @@ const BabyDetails = () => {
                 <TableCell>{child.last_name}</TableCell>
                 <TableCell>{child.dob}</TableCell>
                 <TableCell>{child.address}</TableCell>
+                <TableCell>
+                  <IconButton onClick={() => handleClickOpen(child)} color="primary">
+                    <EditIcon />
+                  </IconButton>
+                  <IconButton onClick={() => handleDelete(child.id)} color="secondary">
+                    <DeleteIcon />
+                  </IconButton>
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>
@@ -117,16 +148,13 @@ const BabyDetails = () => {
       </TableContainer>
 
       <Dialog open={open} onClose={handleClose} maxWidth="sm" fullWidth>
-        <DialogTitle>Add New Baby Details</DialogTitle>
+        <DialogTitle>{selectedChild ? 'Edit Baby Details' : 'Add New Baby Details'}</DialogTitle>
         <DialogContent>
-          <NewBabyDetailsForm />
+          <NewBabyDetailsForm child={selectedChild} onSave={handleSave} />
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose} color="primary">
             Cancel
-          </Button>
-          <Button onClick={handleClose} color="primary">
-            Save
           </Button>
         </DialogActions>
       </Dialog>

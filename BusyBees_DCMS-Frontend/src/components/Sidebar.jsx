@@ -67,7 +67,7 @@ function Sidebar() {
           <ListItemIcon>
             <BabySitterIcon sx={{ color: '#43a047' }} />
           </ListItemIcon>
-          <ListItemText primary="Babysitters" primaryTypographyProps={{ fontWeight: 'bold' }} />
+          <ListItemText primary="Staff" primaryTypographyProps={{ fontWeight: 'bold' }} />
         </ListItem>
       </List>
       <Divider sx={{ marginTop: '20px' }} />
