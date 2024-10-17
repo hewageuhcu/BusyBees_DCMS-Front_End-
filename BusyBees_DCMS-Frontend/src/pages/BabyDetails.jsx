@@ -2,6 +2,7 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { Box, Typography, TextField, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, TableSortLabel, Button, Dialog, DialogTitle, DialogContent, DialogActions, IconButton } from '@mui/material';
 import { Edit as EditIcon, Delete as DeleteIcon } from '@mui/icons-material';
+import Swal from 'sweetalert2';
 import NewBabyDetailsForm from '../components/NewBabyDetailsForm';
 
 const BabyDetails = () => {
@@ -46,15 +47,38 @@ const BabyDetails = () => {
     setOpen(false);
     setSelectedChild(null);
   };
-const handleDelete = (id) => {
-  axios.delete(`http://localhost:8080/child?childId=${id}`)
-    .then(() => {
-      fetchChildren();
-    })
-    .catch(error => {
-      console.error('Error deleting child:', error);
+
+  const handleDelete = (id) => {
+    Swal.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, delete it!'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        axios.delete(`http://localhost:8080/child?childId=${id}`)
+          .then(() => {
+            fetchChildren();
+            Swal.fire(
+              'Deleted!',
+              'The child has been deleted.',
+              'success'
+            );
+          })
+          .catch(error => {
+            console.error('Error deleting child:', error);
+            Swal.fire(
+              'Error!',
+              'There was an error deleting the child.',
+              'error'
+            );
+          });
+      }
     });
-};
+  };
 
   const handleSave = () => {
     fetchChildren();
@@ -150,12 +174,10 @@ const handleDelete = (id) => {
       <Dialog open={open} onClose={handleClose} maxWidth="sm" fullWidth>
         <DialogTitle>{selectedChild ? 'Edit Baby Details' : 'Add New Baby Details'}</DialogTitle>
         <DialogContent>
-          <NewBabyDetailsForm child={selectedChild} onSave={handleSave} />
+          <NewBabyDetailsForm child={selectedChild} onSave={handleSave} onClose={handleClose} />
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose} color="primary">
-            Cancel
-          </Button>
+       
         </DialogActions>
       </Dialog>
     </Box>

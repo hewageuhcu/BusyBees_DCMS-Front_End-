@@ -1,29 +1,29 @@
-import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Box, Typography, Button, TextField, TableContainer, Table, TableHead, TableRow, TableCell, TableBody, Paper, TableSortLabel, Dialog, DialogTitle, DialogContent, DialogActions, IconButton } from '@mui/material';
+import React, { useEffect, useState } from 'react';
+import { Box, Typography, TextField, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, TableSortLabel, Button, Dialog, DialogTitle, DialogContent, DialogActions, IconButton } from '@mui/material';
 import { Edit as EditIcon, Delete as DeleteIcon } from '@mui/icons-material';
-import NewStaffDetailsForm from '../components/NewStaffDetailsForm';
+import NewGuardianDetailsForm from '../components/NewGuardianDetailsForm';
 
-function BabySitterDetails() {
-  const [staff, setStaff] = useState([]);
+const GuardianDetails = () => {
+  const [guardians, setGuardians] = useState([]);
   const [filterName, setFilterName] = useState('');
   const [order, setOrder] = useState('asc');
   const [orderBy, setOrderBy] = useState('first_name');
   const [open, setOpen] = useState(false);
-  const [selectedStaff, setSelectedStaff] = useState(null);
+  const [selectedGuardian, setSelectedGuardian] = useState(null);
 
   useEffect(() => {
-    fetchStaff();
+    fetchGuardians();
   }, []);
 
-  const fetchStaff = () => {
-    axios.get('http://localhost:8080/staff')
+  const fetchGuardians = () => {
+    axios.get('http://localhost:8080/guardian')
       .then(response => {
-        setStaff(response.data);
-        console.log('Staff fetched:', response.data);
+        setGuardians(response.data);
+        console.log('Guardians fetched:', response.data);
       })
       .catch(error => {
-        console.error('Error fetching staff:', error);
+        console.error('Error fetching guardians:', error);
       });
   };
 
@@ -37,42 +37,42 @@ function BabySitterDetails() {
     setOrderBy(property);
   };
 
-  const handleClickOpen = (staff = null) => {
-    setSelectedStaff(staff);
+  const handleClickOpen = (guardian = null) => {
+    setSelectedGuardian(guardian);
     setOpen(true);
   };
 
   const handleClose = () => {
     setOpen(false);
-    setSelectedStaff(null);
+    setSelectedGuardian(null);
   };
 
   const handleDelete = (id) => {
-    axios.delete(`http://localhost:8080/staff?id=${id}`)
+    axios.delete(`http://localhost:8080/guardian?guardianId=${id}`)
       .then(() => {
-        fetchStaff();
+        fetchGuardians();
       })
       .catch(error => {
-        console.error('Error deleting staff:', error);
+        console.error('Error deleting guardian:', error);
       });
   };
 
   const handleSave = () => {
-    fetchStaff();
+    fetchGuardians();
     handleClose();
   };
 
-  const filteredStaff = staff.filter((staff) =>
-    staff.first_name.toLowerCase().includes(filterName.toLowerCase())
+  const filteredGuardians = guardians.filter((guardian) =>
+    guardian.first_name?.toLowerCase().includes(filterName.toLowerCase())
   );
 
   return (
     <Box sx={{ p: 3 }}>
       <Typography variant="h4" gutterBottom>
-        Staff Details
+        Guardian Details
       </Typography>
       <Button variant="contained" color="primary" onClick={() => handleClickOpen()} sx={{ mb: 2 }}>
-        Add New Staff Details
+        Add New Guardian Details
       </Button>
       <TextField
         variant="outlined"
@@ -123,24 +123,24 @@ function BabySitterDetails() {
               </TableCell>
               <TableCell>Email</TableCell>
               <TableCell>Phone Number</TableCell>
-              <TableCell>Role</TableCell>
+              <TableCell>Address</TableCell>
               <TableCell>Actions</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {filteredStaff.map((staff) => (
-              <TableRow key={staff.id} hover>
-                <TableCell>{staff.id}</TableCell>
-                <TableCell>{staff.first_name}</TableCell>
-                <TableCell>{staff.last_name}</TableCell>
-                <TableCell>{staff.email}</TableCell>
-                <TableCell>{staff.phone_number}</TableCell>
-                <TableCell>{staff.role}</TableCell>
+            {filteredGuardians.map((guardian) => (
+              <TableRow key={guardian.id} hover>
+                <TableCell>{guardian.id}</TableCell>
+                <TableCell>{guardian.first_name}</TableCell>
+                <TableCell>{guardian.last_name}</TableCell>
+                <TableCell>{guardian.email}</TableCell>
+                <TableCell>{guardian.phone_number}</TableCell>
+                <TableCell>{guardian.address}</TableCell>
                 <TableCell>
-                  <IconButton onClick={() => handleClickOpen(staff)} color="primary">
+                  <IconButton onClick={() => handleClickOpen(guardian)} color="primary">
                     <EditIcon />
                   </IconButton>
-                  <IconButton onClick={() => handleDelete(staff.id)} color="secondary">
+                  <IconButton onClick={() => handleDelete(guardian.id)} color="secondary">
                     <DeleteIcon />
                   </IconButton>
                 </TableCell>
@@ -151,14 +151,16 @@ function BabySitterDetails() {
       </TableContainer>
 
       <Dialog open={open} onClose={handleClose} maxWidth="sm" fullWidth>
-        <DialogTitle>{selectedStaff ? 'Edit Staff Details' : 'Add New Staff Details'}</DialogTitle>
+        <DialogTitle>{selectedGuardian ? 'Edit Guardian Details' : 'Add New Guardian Details'}</DialogTitle>
         <DialogContent>
-          <NewStaffDetailsForm staff={selectedStaff} onSave={handleSave} onClose={handleClose} />
+          <NewGuardianDetailsForm guardian={selectedGuardian} onSave={handleSave} onClose={handleClose} />
         </DialogContent>
+        <DialogActions>
        
+        </DialogActions>
       </Dialog>
     </Box>
   );
-}
+};
 
-export default BabySitterDetails;
+export default GuardianDetails;

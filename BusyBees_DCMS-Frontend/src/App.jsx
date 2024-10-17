@@ -9,9 +9,11 @@ import BabySitterDetails from './pages/BabySitterDetails';
 import Dashboard from './pages/Dashboard';
 import LoginPage from './pages/LoginPage';
 import './App.css';
+import GuardianDetails from './pages/GuardianDetails';
+import ClassroomDetails from './pages/ClassroomDetails';
 
 function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(true);
 
   return (
     <Router>
@@ -28,6 +30,8 @@ function App() {
               <Routes>
                 <Route path="/dashboard" element={<Dashboard />} />
                 <Route path="/babyDetails" element={<BabyDetails />} />
+                <Route path='/guardianDetails' element={<GuardianDetails/>}/>
+                <Route path='/classroomDetails' element={<ClassroomDetails/>}/>
                 <Route path="/babySitterDetails" element={<BabySitterDetails />} />
                 <Route path="*" element={<Navigate to="/dashboard" />} />
               </Routes>
