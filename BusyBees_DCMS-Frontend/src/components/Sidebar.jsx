@@ -63,7 +63,7 @@ function Sidebar() {
           </ListItemIcon>
           <ListItemText primary="Babys" primaryTypographyProps={{ fontWeight: 'bold' }} />
         </ListItem>
-        <ListItem button component={Link} to="/babySitterDetails" sx={{ '&:hover': { backgroundColor: '#e8f0fe' } }}>
+        <ListItem button component={Link} to="/StaffDetails" sx={{ '&:hover': { backgroundColor: '#e8f0fe' } }}>
           <ListItemIcon>
             <BabySitterIcon sx={{ color: '#43a047' }} />
           </ListItemIcon>

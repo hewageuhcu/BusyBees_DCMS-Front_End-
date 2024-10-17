@@ -5,13 +5,13 @@ import { CssBaseline, Box } from '@mui/material';
 import Sidebar from './components/Sidebar';
 import Header from './components/Header';
 import BabyDetails from './pages/BabyDetails';
-import BabySitterDetails from './pages/BabySitterDetails';
+import StaffDetails from './pages/staffsDetails';
 import Dashboard from './pages/Dashboard';
 import LoginPage from './pages/LoginPage';
 import './App.css';
 
 function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(true);
 
   return (
     <Router>
@@ -28,7 +28,7 @@ function App() {
               <Routes>
                 <Route path="/dashboard" element={<Dashboard />} />
                 <Route path="/babyDetails" element={<BabyDetails />} />
-                <Route path="/babySitterDetails" element={<BabySitterDetails />} />
+                <Route path="/StaffDetails" element={<StaffDetails />} />
                 <Route path="*" element={<Navigate to="/dashboard" />} />
               </Routes>
             </Box>
