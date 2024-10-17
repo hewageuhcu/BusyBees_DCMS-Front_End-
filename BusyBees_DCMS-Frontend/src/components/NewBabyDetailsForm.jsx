@@ -4,7 +4,7 @@ import axios from 'axios';
 
 function NewBabyDetailsForm() {
   const [formData, setFormData] = useState({
-    id: '0',
+    id: 0,
     address: '',
     dob: '',
     first_name: '',
@@ -16,7 +16,7 @@ function NewBabyDetailsForm() {
     const { name, value } = e.target;
     setFormData({
       ...formData,
-      [name]: value,
+      [name]: name === 'guardian_id' ? parseInt(value, 10) : value,
     });
   };
 
