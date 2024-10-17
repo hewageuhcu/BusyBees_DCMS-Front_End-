@@ -2,50 +2,49 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import ChildCareIcon from '@mui/icons-material/ChildCare';
-import MenuIcon from '@mui/icons-material/Menu'; // Add this import
 import { Toolbar, Typography, IconButton } from '@mui/material';
-
 
 const LoginPage = () => {
   const { register, handleSubmit, formState: { errors } } = useForm();
 
-  const onSubmit = (data) => {
-    console.log(data);
-    // Handle login logic (e.g., API call)
+  const onSubmit = async (data) => {
+    try {
+      const response = await fetch('http://localhost:3306/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
+      const result = await response.json();
+      if (response.ok) {
+        alert(result.message);
+      } else {
+        alert(result.message);
+      }
+    } catch (error) {
+      alert('Error connecting to the server');
+    }
   };
 
   return (
     <div className="container">
-      {/* Sidebar */}
       <div className="sidebar">
         <Toolbar>
-          <IconButton
-            edge="start"
-            color="inherit"
-            aria-label="menu"
-            sx={{ mr: 2 }}
-          >
-          
+          <IconButton edge="start" color="inherit" aria-label="menu" sx={{ mr: 2 }}>
           </IconButton>
           <div>
-          <ChildCareIcon sx={{ color: '#FFFFFF', fontSize: 160, mr: 1, marginLeft: 30, marginTop: 10 }} />
-
+            <ChildCareIcon sx={{ color: '#FFFFFF', fontSize: 160, mr: 1, marginLeft: 30, marginTop: 10 }} />
           </div>
           <div>
-         
-          <Typography
-            variant="h4"
-            noWrap
-            component="div"
-            sx={{ flexGrow: 1, color: '#FFFFFF', fontWeight: 'bold', marginLeft: -35,marginTop: 40,fontSize: 90 }}
-          >
-            BusyBees
-          </Typography>
+            <Typography variant="h4" noWrap component="div"
+              sx={{ flexGrow: 1, color: '#FFFFFF', fontWeight: 'bold', marginLeft: -35, marginTop: 40, fontSize: 90 }}>
+              BusyBees
+            </Typography>
           </div>
         </Toolbar>
       </div>
 
-      {/* Login Form */}
       <div className="login-form">
         <h2>Login</h2>
         <form onSubmit={handleSubmit(onSubmit)}>
