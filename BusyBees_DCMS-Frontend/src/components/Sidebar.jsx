@@ -69,6 +69,18 @@ function Sidebar() {
           </ListItemIcon>
           <ListItemText primary="Staff" primaryTypographyProps={{ fontWeight: 'bold' }} />
         </ListItem>
+        <ListItem button component={Link} to="/GuardianDetails" sx={{ '&:hover': { backgroundColor: '#e8f0fe' } }}>
+          <ListItemIcon>
+            <BabySitterIcon sx={{ color: '#43a047' }} />
+          </ListItemIcon>
+          <ListItemText primary="Guardian" primaryTypographyProps={{ fontWeight: 'bold' }} />
+        </ListItem>
+        <ListItem button component={Link} to="/ScheduleDetails" sx={{ '&:hover': { backgroundColor: '#e8f0fe' } }}>
+          <ListItemIcon>
+            <BabySitterIcon sx={{ color: '#43a047' }} />
+          </ListItemIcon>
+          <ListItemText primary="Schedule" primaryTypographyProps={{ fontWeight: 'bold' }} />
+        </ListItem>
       </List>
       <Divider sx={{ marginTop: '20px' }} />
     </Drawer>

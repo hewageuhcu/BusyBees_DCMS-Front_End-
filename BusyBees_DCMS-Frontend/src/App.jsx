@@ -6,6 +6,8 @@ import Sidebar from './components/Sidebar';
 import Header from './components/Header';
 import BabyDetails from './pages/BabyDetails';
 import StaffDetails from './pages/staffsDetails';
+import GuardianDetails from './pages/GuardianDetails';
+import ScheduleDetails from './pages/ScheduleDetails';
 import Dashboard from './pages/Dashboard';
 import LoginPage from './pages/LoginPage';
 import './App.css';
@@ -29,6 +31,8 @@ function App() {
                 <Route path="/dashboard" element={<Dashboard />} />
                 <Route path="/babyDetails" element={<BabyDetails />} />
                 <Route path="/StaffDetails" element={<StaffDetails />} />
+                <Route path="/GuardianDetails" element={<GuardianDetails />} />
+                <Route path="/ScheduleDetails" element={<ScheduleDetails />} />
                 <Route path="*" element={<Navigate to="/dashboard" />} />
               </Routes>
             </Box>
