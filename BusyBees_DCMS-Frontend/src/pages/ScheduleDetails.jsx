@@ -1,28 +1,47 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { Box, Typography, TextField, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, TableSortLabel, Button, Dialog, DialogTitle, DialogContent, DialogActions, IconButton } from '@mui/material';
+import {
+  Box,
+  Typography,
+  TextField,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  TableSortLabel,
+  Button,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  IconButton
+} from '@mui/material';
 import { Edit as EditIcon, Delete as DeleteIcon } from '@mui/icons-material';
 import NewScheduleDetailsForm from '../components/NewScheduleDetailsForm';
 
 const ScheduleDetails = () => {
-  const [schedules, setScheduleren] = useState([]);
+  const [schedules, setSchedules] = useState([]);
   const [filterName, setFilterName] = useState('');
   const [order, setOrder] = useState('asc');
-  const [orderBy, setOrderBy] = useState('first_name');
+  const [orderBy, setOrderBy] = useState('date');
   const [open, setOpen] = useState(false);
   const [selectedSchedule, setSelectedSchedule] = useState(null);
 
   useEffect(() => {
-    fetchScheduleren();
+    fetchSchedules();
   }, []);
 
-  const fetchScheduleren = () => {
-    axios.get('http://localhost:8080/schedule')
-      .then(response => {
-        setScheduleren(response.data);
-        console.log('Scheduleren fetched:', response.data);
+  const fetchSchedules = () => {
+    axios
+      .get('http://localhost:8080/schedule')
+      .then((response) => {
+        setSchedules(response.data);
+        console.log('Schedules fetched:', response.data);
       })
-      .catch(error => {
+      .catch((error) => {
         console.error('Error fetching schedules:', error);
       });
   };
@@ -46,23 +65,26 @@ const ScheduleDetails = () => {
     setOpen(false);
     setSelectedSchedule(null);
   };
-const handleDelete = (id) => {
-  axios.delete(`http://localhost:8080/schedule?scheduleId=${id}`)
-    .then(() => {
-      fetchScheduleren();
-    })
-    .catch(error => {
-      console.error('Error deleting schedule:', error);
-    });
-};
+
+  const handleDelete = (id) => {
+    axios
+      .delete(`http://localhost:8080/schedule?scheduleId=${id}`)
+      .then(() => {
+        fetchSchedules();
+      })
+      .catch((error) => {
+        console.error('Error deleting schedule:', error);
+      });
+  };
 
   const handleSave = () => {
-    fetchScheduleren();
+    fetchSchedules();
     handleClose();
   };
 
-  const filteredScheduleren = schedules.filter((schedule) =>
-    schedule.first_name.toLowerCase().includes(filterName.toLowerCase())
+  // Filtering schedules based on 'staff_id'
+  const filteredSchedules = schedules.filter((schedule) =>
+    schedule.staff_id.toString().includes(filterName.toLowerCase())
   );
 
   return (
@@ -70,12 +92,17 @@ const handleDelete = (id) => {
       <Typography variant="h4" gutterBottom>
         Schedule Details
       </Typography>
-      <Button variant="contained" color="primary" onClick={() => handleClickOpen()} sx={{ mb: 2 }}>
+      <Button
+        variant="contained"
+        color="primary"
+        onClick={() => handleClickOpen()}
+        sx={{ mb: 2 }}
+      >
         Add New Schedule Details
       </Button>
       <TextField
         variant="outlined"
-        placeholder="Search by first name"
+        placeholder="Search by staff ID"
         value={filterName}
         onChange={handleFilterByName}
         sx={{
@@ -104,29 +131,22 @@ const handleDelete = (id) => {
               <TableCell>ID</TableCell>
               <TableCell>
                 <TableSortLabel
-                  active={orderBy === 'first_name'}
-                  direction={orderBy === 'first_name' ? order : 'asc'}
-                  onClick={() => handleRequestSort('first_name')}
+                  active={orderBy === 'date'}
+                  direction={orderBy === 'date' ? order : 'asc'}
+                  onClick={() => handleRequestSort('date')}
                 >
-                  First Name
+                  Date
                 </TableSortLabel>
               </TableCell>
-              <TableCell>
-                <TableSortLabel
-                  active={orderBy === 'last_name'}
-                  direction={orderBy === 'last_name' ? order : 'asc'}
-                  onClick={() => handleRequestSort('last_name')}
-                >
-                  Last Name
-                </TableSortLabel>
-              </TableCell>
-              <TableCell>Date of Birth</TableCell>
-              <TableCell>Address</TableCell>
+              <TableCell>End Time</TableCell>
+              <TableCell>Staff ID</TableCell>
+              <TableCell>Child ID</TableCell>
+              <TableCell>Classroom ID</TableCell>
               <TableCell>Actions</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {filteredScheduleren.map((schedule) => (
+            {filteredSchedules.map((schedule) => (
               <TableRow key={schedule.id} hover>
                 <TableCell>{schedule.id}</TableCell>
                 <TableCell>{schedule.date}</TableCell>
@@ -135,10 +155,16 @@ const handleDelete = (id) => {
                 <TableCell>{schedule.child_id}</TableCell>
                 <TableCell>{schedule.classroom_id}</TableCell>
                 <TableCell>
-                  <IconButton onClick={() => handleClickOpen(schedule)} color="primary">
+                  <IconButton
+                    onClick={() => handleClickOpen(schedule)}
+                    color="primary"
+                  >
                     <EditIcon />
                   </IconButton>
-                  <IconButton onClick={() => handleDelete(schedule.id)} color="secondary">
+                  <IconButton
+                    onClick={() => handleDelete(schedule.id)}
+                    color="secondary"
+                  >
                     <DeleteIcon />
                   </IconButton>
                 </TableCell>
@@ -149,7 +175,9 @@ const handleDelete = (id) => {
       </TableContainer>
 
       <Dialog open={open} onClose={handleClose} maxWidth="sm" fullWidth>
-        <DialogTitle>{selectedSchedule ? 'Edit Schedule Details' : 'Add New Schedule Details'}</DialogTitle>
+        <DialogTitle>
+          {selectedSchedule ? 'Edit Schedule Details' : 'Add New Schedule Details'}
+        </DialogTitle>
         <DialogContent>
           <NewScheduleDetailsForm schedule={selectedSchedule} onSave={handleSave} />
         </DialogContent>
