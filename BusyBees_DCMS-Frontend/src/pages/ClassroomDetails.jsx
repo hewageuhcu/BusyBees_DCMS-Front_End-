@@ -2,6 +2,7 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { Box, Typography, TextField, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, TableSortLabel, Button, Dialog, DialogTitle, DialogContent, DialogActions, IconButton } from '@mui/material';
 import { Edit as EditIcon, Delete as DeleteIcon } from '@mui/icons-material';
+import Swal from 'sweetalert2';
 import NewClassroomDetailsForm from '../components/NewClassroomDetailsForm';
 
 const ClassroomDetails = () => {
@@ -48,13 +49,35 @@ const ClassroomDetails = () => {
   };
 
   const handleDelete = (id) => {
-    axios.delete(`http://localhost:8080/classRoom?id=${id}`)
-      .then(() => {
-        fetchClassrooms();
-      })
-      .catch(error => {
-        console.error('Error deleting classroom:', error);
-      });
+    Swal.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, delete it!'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        axios.delete(`http://localhost:8080/classRoom?id=${id}`)
+          .then(() => {
+            fetchClassrooms();
+            Swal.fire(
+              'Deleted!',
+              'The classroom has been deleted.',
+              'success'
+            );
+          })
+          .catch(error => {
+            console.error('Error deleting classroom:', error);
+            Swal.fire(
+              'Error!',
+              'There was an error deleting the classroom.',
+              'error'
+            );
+          });
+      }
+    });
   };
 
   const handleSave = () => {

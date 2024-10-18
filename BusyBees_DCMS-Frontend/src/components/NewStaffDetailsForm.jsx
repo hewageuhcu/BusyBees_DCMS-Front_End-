@@ -36,7 +36,7 @@ function NewStaffDetailsForm({ staff, onSave, onClose }) {
   const handleSubmit = (e) => {
     e.preventDefault();
     const request = staff
-      ? axios.put(`http://localhost:8080/staff?staffId=${staff.id}`, formData)
+      ? axios.put(`http://localhost:8080/staff?id=${formData.id}`, formData)
       : axios.post('http://localhost:8080/staff', formData);
 
     request
@@ -60,25 +60,27 @@ function NewStaffDetailsForm({ staff, onSave, onClose }) {
   return (
     <Box component="form" onSubmit={handleSubmit} sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
       <TextField
-        label="Email"
-        name="email"
-        value={formData.email}
-        onChange={handleChange}
-        variant="outlined"
-        fullWidth
-      />
-      <TextField
         label="First Name"
         name="first_name"
         value={formData.first_name}
         onChange={handleChange}
         variant="outlined"
         fullWidth
+        required
       />
       <TextField
         label="Last Name"
         name="last_name"
         value={formData.last_name}
+        onChange={handleChange}
+        variant="outlined"
+        fullWidth
+        required
+      />
+      <TextField
+        label="Email"
+        name="email"
+        value={formData.email}
         onChange={handleChange}
         variant="outlined"
         fullWidth

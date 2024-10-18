@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Box, Typography, Button, TextField, TableContainer, Table, TableHead, TableRow, TableCell, TableBody, Paper, TableSortLabel, Dialog, DialogTitle, DialogContent, DialogActions, IconButton } from '@mui/material';
 import { Edit as EditIcon, Delete as DeleteIcon } from '@mui/icons-material';
+import Swal from 'sweetalert2';
 import NewStaffDetailsForm from '../components/NewStaffDetailsForm';
 
 function BabySitterDetails() {
@@ -48,13 +49,35 @@ function BabySitterDetails() {
   };
 
   const handleDelete = (id) => {
-    axios.delete(`http://localhost:8080/staff?id=${id}`)
-      .then(() => {
-        fetchStaff();
-      })
-      .catch(error => {
-        console.error('Error deleting staff:', error);
-      });
+    Swal.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, delete it!'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        axios.delete(`http://localhost:8080/staff?id=${id}`)
+          .then(() => {
+            fetchStaff();
+            Swal.fire(
+              'Deleted!',
+              'The staff member has been deleted.',
+              'success'
+            );
+          })
+          .catch(error => {
+            console.error('Error deleting staff:', error);
+            Swal.fire(
+              'Error!',
+              'There was an error deleting the staff member.',
+              'error'
+            );
+          });
+      }
+    });
   };
 
   const handleSave = () => {

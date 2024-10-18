@@ -36,7 +36,7 @@ function NewGuardianDetailsForm({ guardian, onSave, onClose }) {
   const handleSubmit = (e) => {
     e.preventDefault();
     const request = guardian
-      ? axios.put(`http://localhost:8080/guardian?guardianId=${guardian.id}`, formData)
+      ? axios.put(`http://localhost:8080/guardian?id=${formData.id}`, formData)
       : axios.post('http://localhost:8080/guardian', formData);
 
     request

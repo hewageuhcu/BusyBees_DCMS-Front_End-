@@ -2,6 +2,7 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { Box, Typography, TextField, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, TableSortLabel, Button, Dialog, DialogTitle, DialogContent, DialogActions, IconButton } from '@mui/material';
 import { Edit as EditIcon, Delete as DeleteIcon } from '@mui/icons-material';
+import Swal from 'sweetalert2';
 import NewGuardianDetailsForm from '../components/NewGuardianDetailsForm';
 
 const GuardianDetails = () => {
@@ -48,13 +49,35 @@ const GuardianDetails = () => {
   };
 
   const handleDelete = (id) => {
-    axios.delete(`http://localhost:8080/guardian?guardianId=${id}`)
-      .then(() => {
-        fetchGuardians();
-      })
-      .catch(error => {
-        console.error('Error deleting guardian:', error);
-      });
+    Swal.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, delete it!'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        axios.delete(`http://localhost:8080/guardian?id=${id}`)
+          .then(() => {
+            fetchGuardians();
+            Swal.fire(
+              'Deleted!',
+              'The guardian has been deleted.',
+              'success'
+            );
+          })
+          .catch(error => {
+            console.error('Error deleting guardian:', error);
+            Swal.fire(
+              'Error!',
+              'There was an error deleting the guardian.',
+              'error'
+            );
+          });
+      }
+    });
   };
 
   const handleSave = () => {
