@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { TextField, Button, Box } from '@mui/material';
+import { TextField, Button, Box, Select, MenuItem, InputLabel, FormControl } from '@mui/material';
 import axios from 'axios';
 
 function NewStaffDetailsForm({ staff, onSave, onClose }) {
@@ -93,14 +93,23 @@ function NewStaffDetailsForm({ staff, onSave, onClose }) {
         variant="outlined"
         fullWidth
       />
-      <TextField
-        label="Role"
-        name="role"
-        value={formData.role}
-        onChange={handleChange}
-        variant="outlined"
-        fullWidth
-      />
+      <FormControl variant="outlined" fullWidth>
+        <InputLabel id="role-label">Role</InputLabel>
+        <Select
+          labelId="role-label"
+          name="role"
+          value={formData.role}
+          onChange={handleChange}
+          label="Role"
+        >
+          <MenuItem value="Teacher">Teacher</MenuItem>
+          <MenuItem value="Assistant">Assistant</MenuItem>
+          <MenuItem value="Cook">Babysitter</MenuItem>
+          <MenuItem value="Administrator">Administrator</MenuItem>
+          <MenuItem value="Janitor">Janitor</MenuItem>
+          
+        </Select>
+      </FormControl>
       <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 2 }}>
         <Button onClick={onClose} color="primary">
           Cancel
