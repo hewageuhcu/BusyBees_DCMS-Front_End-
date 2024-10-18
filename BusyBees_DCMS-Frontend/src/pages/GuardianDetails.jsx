@@ -59,7 +59,7 @@ const GuardianDetails = () => {
       confirmButtonText: 'Yes, delete it!'
     }).then((result) => {
       if (result.isConfirmed) {
-        axios.delete(`http://localhost:8080/guardian?id=${id}`)
+        axios.delete(`http://localhost:8080/Guardian?id=${id}`)
           .then(() => {
             fetchGuardians();
             Swal.fire(
