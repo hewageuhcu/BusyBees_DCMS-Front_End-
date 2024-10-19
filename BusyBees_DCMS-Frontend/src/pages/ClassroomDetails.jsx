@@ -1,30 +1,30 @@
-import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Box, Typography, Button, TextField, TableContainer, Table, TableHead, TableRow, TableCell, TableBody, Paper, TableSortLabel, Dialog, DialogTitle, DialogContent, DialogActions, IconButton } from '@mui/material';
+import React, { useEffect, useState } from 'react';
+import { Box, Typography, TextField, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, TableSortLabel, Button, Dialog, DialogTitle, DialogContent, DialogActions, IconButton } from '@mui/material';
 import { Edit as EditIcon, Delete as DeleteIcon } from '@mui/icons-material';
 import Swal from 'sweetalert2';
-import NewStaffDetailsForm from '../components/NewStaffDetailsForm';
+import NewClassroomDetailsForm from '../components/NewClassroomDetailsForm';
 
-function BabySitterDetails() {
-  const [staff, setStaff] = useState([]);
+const ClassroomDetails = () => {
+  const [classrooms, setClassrooms] = useState([]);
   const [filterName, setFilterName] = useState('');
   const [order, setOrder] = useState('asc');
-  const [orderBy, setOrderBy] = useState('first_name');
+  const [orderBy, setOrderBy] = useState('class_name');
   const [open, setOpen] = useState(false);
-  const [selectedStaff, setSelectedStaff] = useState(null);
+  const [selectedClassroom, setSelectedClassroom] = useState(null);
 
   useEffect(() => {
-    fetchStaff();
+    fetchClassrooms();
   }, []);
 
-  const fetchStaff = () => {
-    axios.get('http://localhost:8080/staff')
+  const fetchClassrooms = () => {
+    axios.get('http://localhost:8080/classRoom')
       .then(response => {
-        setStaff(response.data);
-        console.log('Staff fetched:', response.data);
+        setClassrooms(response.data);
+        console.log('Classrooms fetched:', response.data);
       })
       .catch(error => {
-        console.error('Error fetching staff:', error);
+        console.error('Error fetching classrooms:', error);
       });
   };
 
@@ -38,14 +38,14 @@ function BabySitterDetails() {
     setOrderBy(property);
   };
 
-  const handleClickOpen = (staff = null) => {
-    setSelectedStaff(staff);
+  const handleClickOpen = (classroom = null) => {
+    setSelectedClassroom(classroom);
     setOpen(true);
   };
 
   const handleClose = () => {
     setOpen(false);
-    setSelectedStaff(null);
+    setSelectedClassroom(null);
   };
 
   const handleDelete = (id) => {
@@ -59,20 +59,20 @@ function BabySitterDetails() {
       confirmButtonText: 'Yes, delete it!'
     }).then((result) => {
       if (result.isConfirmed) {
-        axios.delete(`http://localhost:8080/staff?id=${id}`)
+        axios.delete(`http://localhost:8080/classRoom?id=${id}`)
           .then(() => {
-            fetchStaff();
+            fetchClassrooms();
             Swal.fire(
               'Deleted!',
-              'The staff member has been deleted.',
+              'The classroom has been deleted.',
               'success'
             );
           })
           .catch(error => {
-            console.error('Error deleting staff:', error);
+            console.error('Error deleting classroom:', error);
             Swal.fire(
               'Error!',
-              'There was an error deleting the staff member.',
+              'There was an error deleting the classroom.',
               'error'
             );
           });
@@ -81,25 +81,25 @@ function BabySitterDetails() {
   };
 
   const handleSave = () => {
-    fetchStaff();
+    fetchClassrooms();
     handleClose();
   };
 
-  const filteredStaff = staff.filter((staff) =>
-    staff.first_name.toLowerCase().includes(filterName.toLowerCase())
+  const filteredClassrooms = classrooms.filter((classroom) =>
+    classroom.class_name?.toLowerCase().includes(filterName.toLowerCase())
   );
 
   return (
     <Box sx={{ p: 3 }}>
       <Typography variant="h4" gutterBottom>
-        Staff Details
+        Classroom Details
       </Typography>
       <Button variant="contained" color="primary" onClick={() => handleClickOpen()} sx={{ mb: 2 }}>
-        Add New Staff Details
+        Add New Classroom Details
       </Button>
       <TextField
         variant="outlined"
-        placeholder="Search by first name"
+        placeholder="Search by class name"
         value={filterName}
         onChange={handleFilterByName}
         sx={{
@@ -128,42 +128,30 @@ function BabySitterDetails() {
               <TableCell>ID</TableCell>
               <TableCell>
                 <TableSortLabel
-                  active={orderBy === 'first_name'}
-                  direction={orderBy === 'first_name' ? order : 'asc'}
-                  onClick={() => handleRequestSort('first_name')}
+                  active={orderBy === 'class_name'}
+                  direction={orderBy === 'class_name' ? order : 'asc'}
+                  onClick={() => handleRequestSort('class_name')}
                 >
-                  First Name
+                  Class Name
                 </TableSortLabel>
               </TableCell>
-              <TableCell>
-                <TableSortLabel
-                  active={orderBy === 'last_name'}
-                  direction={orderBy === 'last_name' ? order : 'asc'}
-                  onClick={() => handleRequestSort('last_name')}
-                >
-                  Last Name
-                </TableSortLabel>
-              </TableCell>
-              <TableCell>Email</TableCell>
-              <TableCell>Phone Number</TableCell>
-              <TableCell>Role</TableCell>
+              <TableCell>Age Group</TableCell>
+              <TableCell>Last Updated</TableCell>
               <TableCell>Actions</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {filteredStaff.map((staff) => (
-              <TableRow key={staff.id} hover>
-                <TableCell>{staff.id}</TableCell>
-                <TableCell>{staff.first_name}</TableCell>
-                <TableCell>{staff.last_name}</TableCell>
-                <TableCell>{staff.email}</TableCell>
-                <TableCell>{staff.phone_number}</TableCell>
-                <TableCell>{staff.role}</TableCell>
+            {filteredClassrooms.map((classroom) => (
+              <TableRow key={classroom.id} hover>
+                <TableCell>{classroom.id}</TableCell>
+                <TableCell>{classroom.class_name}</TableCell>
+                <TableCell>{classroom.age_group}</TableCell>
+                <TableCell>{classroom.last_updated}</TableCell>
                 <TableCell>
-                  <IconButton onClick={() => handleClickOpen(staff)} color="primary">
+                  <IconButton onClick={() => handleClickOpen(classroom)} color="primary">
                     <EditIcon />
                   </IconButton>
-                  <IconButton onClick={() => handleDelete(staff.id)} color="secondary">
+                  <IconButton onClick={() => handleDelete(classroom.id)} color="secondary">
                     <DeleteIcon />
                   </IconButton>
                 </TableCell>
@@ -174,14 +162,16 @@ function BabySitterDetails() {
       </TableContainer>
 
       <Dialog open={open} onClose={handleClose} maxWidth="sm" fullWidth>
-        <DialogTitle>{selectedStaff ? 'Edit Staff Details' : 'Add New Staff Details'}</DialogTitle>
+        <DialogTitle>{selectedClassroom ? 'Edit Classroom Details' : 'Add New Classroom Details'}</DialogTitle>
         <DialogContent>
-          <NewStaffDetailsForm staff={selectedStaff} onSave={handleSave} onClose={handleClose} />
+          <NewClassroomDetailsForm classroom={selectedClassroom} onSave={handleSave} onClose={handleClose} />
         </DialogContent>
+        <DialogActions>
        
+        </DialogActions>
       </Dialog>
     </Box>
   );
-}
+};
 
-export default BabySitterDetails;
+export default ClassroomDetails;

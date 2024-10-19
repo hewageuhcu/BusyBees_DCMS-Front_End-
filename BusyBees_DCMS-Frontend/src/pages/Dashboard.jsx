@@ -1,9 +1,8 @@
-// src/pages/Dashboard.jsx
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { Box, Typography, Grid, Paper, Card, CardContent, Avatar } from '@mui/material';
 import { People, Group, School, Work, Schedule } from '@mui/icons-material';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from 'recharts';
 
 const Dashboard = () => {
   const [children, setChildren] = useState([]);
@@ -27,12 +26,25 @@ const Dashboard = () => {
   const schedulesCount = schedules.length;
 
   const data = [
-    { name: 'Children', count: childrenCount },
-    { name: 'Guardians', count: guardiansCount },
-    { name: 'Classrooms', count: classroomsCount },
-    { name: 'Staff', count: staffsCount },
-    { name: 'Schedules', count: schedulesCount },
+    { name: 'Children', value: childrenCount },
+    { name: 'Guardians', value: guardiansCount },
+    { name: 'Classrooms', value: classroomsCount },
+    { name: 'Staff', value: staffsCount },
+    { name: 'Schedules', value: schedulesCount },
   ];
+
+  const staffRoles = staffs.reduce((acc, staff) => {
+    acc[staff.role] = (acc[staff.role] || 0) + 1;
+    return acc;
+  }, {});
+
+  const staffRolesData = Object.keys(staffRoles).map(role => ({
+    name: role,
+    value: staffRoles[role],
+  }));
+
+  const COLORS1 = ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF'];
+  const COLORS2 = ['#D32F2F', '#1976D2', '#FBC02D', '#388E3C', '#7B1FA2'];
 
   return (
     <Box sx={{ p: 3 }}>
@@ -95,19 +107,37 @@ const Dashboard = () => {
             </CardContent>
           </Card>
         </Grid>
-        <Grid item xs={12}>
+        <Grid item xs={12} md={6}>
+          <Paper sx={{ p: 2, borderRadius: 2 }}>
+            <Typography variant="h6" gutterBottom>
+              Staff Roles Distribution
+            </Typography>
+            <ResponsiveContainer width="100%" height={300}>
+              <PieChart>
+                <Pie data={staffRolesData} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={100} fill="#8884d8" label>
+                  {staffRolesData.map((entry, index) => (
+                    <Cell key={`cell-${index}`} fill={COLORS1[index % COLORS1.length]} />
+                  ))}
+                </Pie>
+                <Tooltip />
+              </PieChart>
+            </ResponsiveContainer>
+          </Paper>
+        </Grid>
+        <Grid item xs={12} md={6}>
           <Paper sx={{ p: 2, borderRadius: 2 }}>
             <Typography variant="h6" gutterBottom>
               Data Overview
             </Typography>
-            <ResponsiveContainer width="100%" height={400}>
-              <BarChart data={data} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="name" />
-                <YAxis />
+            <ResponsiveContainer width="100%" height={300}>
+              <PieChart>
+                <Pie data={data} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={100} fill="#8884d8" label>
+                  {data.map((entry, index) => (
+                    <Cell key={`cell-${index}`} fill={COLORS2[index % COLORS2.length]} />
+                  ))}
+                </Pie>
                 <Tooltip />
-                <Bar dataKey="count" fill="#8884d8" />
-              </BarChart>
+              </PieChart>
             </ResponsiveContainer>
           </Paper>
         </Grid>
