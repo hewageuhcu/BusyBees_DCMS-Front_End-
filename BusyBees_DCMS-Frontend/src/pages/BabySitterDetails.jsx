@@ -1,30 +1,30 @@
-import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { Box, Typography, TextField, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, TableSortLabel, Button, Dialog, DialogTitle, DialogContent, DialogActions, IconButton } from '@mui/material';
+import axios from 'axios';
+import { Box, Typography, Button, TextField, TableContainer, Table, TableHead, TableRow, TableCell, TableBody, Paper, TableSortLabel, Dialog, DialogTitle, DialogContent, DialogActions, IconButton } from '@mui/material';
 import { Edit as EditIcon, Delete as DeleteIcon } from '@mui/icons-material';
 import Swal from 'sweetalert2';
-import NewGuardianDetailsForm from '../components/NewGuardianDetailsForm';
+import NewStaffDetailsForm from '../components/NewStaffDetailsForm';
 
-const GuardianDetails = () => {
-  const [guardians, setGuardians] = useState([]);
+function BabySitterDetails() {
+  const [staff, setStaff] = useState([]);
   const [filterName, setFilterName] = useState('');
   const [order, setOrder] = useState('asc');
   const [orderBy, setOrderBy] = useState('first_name');
   const [open, setOpen] = useState(false);
-  const [selectedGuardian, setSelectedGuardian] = useState(null);
+  const [selectedStaff, setSelectedStaff] = useState(null);
 
   useEffect(() => {
-    fetchGuardians();
+    fetchStaff();
   }, []);
 
-  const fetchGuardians = () => {
-    axios.get('http://localhost:8080/guardian')
+  const fetchStaff = () => {
+    axios.get('http://localhost:8080/staff')
       .then(response => {
-        setGuardians(response.data);
-        console.log('Guardians fetched:', response.data);
+        setStaff(response.data);
+        console.log('Staff fetched:', response.data);
       })
       .catch(error => {
-        console.error('Error fetching guardians:', error);
+        console.error('Error fetching staff:', error);
       });
   };
 
@@ -38,14 +38,14 @@ const GuardianDetails = () => {
     setOrderBy(property);
   };
 
-  const handleClickOpen = (guardian = null) => {
-    setSelectedGuardian(guardian);
+  const handleClickOpen = (staff = null) => {
+    setSelectedStaff(staff);
     setOpen(true);
   };
 
   const handleClose = () => {
     setOpen(false);
-    setSelectedGuardian(null);
+    setSelectedStaff(null);
   };
 
   const handleDelete = (id) => {
@@ -59,20 +59,20 @@ const GuardianDetails = () => {
       confirmButtonText: 'Yes, delete it!'
     }).then((result) => {
       if (result.isConfirmed) {
-        axios.delete(`http://localhost:8080/Guardian?id=${id}`)
+        axios.delete(`http://localhost:8080/staff?id=${id}`)
           .then(() => {
-            fetchGuardians();
+            fetchStaff();
             Swal.fire(
               'Deleted!',
-              'The guardian has been deleted.',
+              'The staff member has been deleted.',
               'success'
             );
           })
           .catch(error => {
-            console.error('Error deleting guardian:', error);
+            console.error('Error deleting staff:', error);
             Swal.fire(
               'Error!',
-              'There was an error deleting the guardian.',
+              'There was an error deleting the staff member.',
               'error'
             );
           });
@@ -81,21 +81,21 @@ const GuardianDetails = () => {
   };
 
   const handleSave = () => {
-    fetchGuardians();
+    fetchStaff();
     handleClose();
   };
 
-  const filteredGuardians = guardians.filter((guardian) =>
-    guardian.first_name?.toLowerCase().includes(filterName.toLowerCase())
+  const filteredStaff = staff.filter((staff) =>
+    staff.first_name.toLowerCase().includes(filterName.toLowerCase())
   );
 
   return (
     <Box sx={{ p: 3 }}>
       <Typography variant="h4" gutterBottom>
-        Guardian Details
+        Staff Details
       </Typography>
       <Button variant="contained" color="primary" onClick={() => handleClickOpen()} sx={{ mb: 2 }}>
-        Add New Guardian Details
+        Add New Staff Details
       </Button>
       <TextField
         variant="outlined"
@@ -146,24 +146,24 @@ const GuardianDetails = () => {
               </TableCell>
               <TableCell>Email</TableCell>
               <TableCell>Phone Number</TableCell>
-              <TableCell>Address</TableCell>
+              <TableCell>Role</TableCell>
               <TableCell>Actions</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {filteredGuardians.map((guardian) => (
-              <TableRow key={guardian.id} hover>
-                <TableCell>{guardian.id}</TableCell>
-                <TableCell>{guardian.first_name}</TableCell>
-                <TableCell>{guardian.last_name}</TableCell>
-                <TableCell>{guardian.email}</TableCell>
-                <TableCell>{guardian.phone_number}</TableCell>
-                <TableCell>{guardian.address}</TableCell>
+            {filteredStaff.map((staff) => (
+              <TableRow key={staff.id} hover>
+                <TableCell>{staff.id}</TableCell>
+                <TableCell>{staff.first_name}</TableCell>
+                <TableCell>{staff.last_name}</TableCell>
+                <TableCell>{staff.email}</TableCell>
+                <TableCell>{staff.phone_number}</TableCell>
+                <TableCell>{staff.role}</TableCell>
                 <TableCell>
-                  <IconButton onClick={() => handleClickOpen(guardian)} color="primary">
+                  <IconButton onClick={() => handleClickOpen(staff)} color="primary">
                     <EditIcon />
                   </IconButton>
-                  <IconButton onClick={() => handleDelete(guardian.id)} color="secondary">
+                  <IconButton onClick={() => handleDelete(staff.id)} color="secondary">
                     <DeleteIcon />
                   </IconButton>
                 </TableCell>
@@ -174,16 +174,14 @@ const GuardianDetails = () => {
       </TableContainer>
 
       <Dialog open={open} onClose={handleClose} maxWidth="sm" fullWidth>
-        <DialogTitle>{selectedGuardian ? 'Edit Guardian Details' : 'Add New Guardian Details'}</DialogTitle>
+        <DialogTitle>{selectedStaff ? 'Edit Staff Details' : 'Add New Staff Details'}</DialogTitle>
         <DialogContent>
-          <NewGuardianDetailsForm guardian={selectedGuardian} onSave={handleSave} onClose={handleClose} />
+          <NewStaffDetailsForm staff={selectedStaff} onSave={handleSave} onClose={handleClose} />
         </DialogContent>
-        <DialogActions>
        
-        </DialogActions>
       </Dialog>
     </Box>
   );
-};
+}
 
-export default GuardianDetails;
+export default BabySitterDetails;

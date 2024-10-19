@@ -32,12 +32,12 @@ const LoginPage = ({ setIsLoggedIn }) => {
       console.log('Login result:', result);
       if (response.ok) {
         setIsLoggedIn(true); // Set logged-in state to true
-        alert(result.message);
+        // alert(result.message);
       } else {
-        alert(result.message); // Error message from server
+        // alert(result.message); // Error message from server
       }
     } catch (error) {
-      alert('Error connecting to the server: ' + error); // Handle network or other errors
+      // alert('Error connecting to the server: ' + error); // Handle network or other errors
     }
   };
 

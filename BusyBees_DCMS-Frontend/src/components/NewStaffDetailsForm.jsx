@@ -10,6 +10,7 @@ function NewStaffDetailsForm({ staff, onSave, onClose }) {
     last_name: '',
     phone_number: '',
     role: '',
+    password: '',  // Added password field
   });
 
   useEffect(() => {
@@ -21,6 +22,7 @@ function NewStaffDetailsForm({ staff, onSave, onClose }) {
         last_name: staff.last_name || '',
         phone_number: staff.phone_number || '',
         role: staff.role || '',
+        password: '', // Reset password on edit
       });
     }
   }, [staff]);
@@ -29,32 +31,12 @@ function NewStaffDetailsForm({ staff, onSave, onClose }) {
     const { name, value } = e.target;
     setFormData({
       ...formData,
-<<<<<<< HEAD
-      [name]: name === 'guardian_id' ? parseInt(value, 10) : value,
-=======
       [name]: value,
->>>>>>> e758a5e6db78a870791a40e25785c0e73d9d45ba
     });
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-<<<<<<< HEAD
-    console.log('Submitting form data:', formData); // Log the form data
-    axios.post('http://localhost:8080/child', formData)
-      .then(response => {
-        console.log('Baby details saved:', response.data);
-        setFormData({
-          address: '',
-          dob: '',
-          first_name: '',
-          last_name: '',
-          guardian_id: '',
-        });
-      })
-      .catch(error => {
-        console.error('Error saving baby details:', error);
-=======
     const request = staff
       ? axios.put(`http://localhost:8080/staff?id=${formData.id}`, formData)
       : axios.post('http://localhost:8080/staff', formData);
@@ -69,12 +51,12 @@ function NewStaffDetailsForm({ staff, onSave, onClose }) {
           last_name: '',
           phone_number: '',
           role: '',
+          password: '', // Reset password field
         });
         onSave();
       })
       .catch(error => {
         console.error('Error saving staff details:', error);
->>>>>>> e758a5e6db78a870791a40e25785c0e73d9d45ba
       });
   };
 
@@ -99,39 +81,6 @@ function NewStaffDetailsForm({ staff, onSave, onClose }) {
         required
       />
       <TextField
-<<<<<<< HEAD
-        label="Date of Birth"
-        name="dob"
-        value={formData.dob}
-        onChange={handleChange}
-        variant="outlined"
-        fullWidth
-        required
-        type="date"
-        InputLabelProps={{
-          shrink: true,
-        }}
-      />
-      <TextField
-        label="Address"
-        name="address"
-        value={formData.address}
-        onChange={handleChange}
-        variant="outlined"
-        fullWidth
-        required
-      />
-      <TextField
-        label="Guardian ID"
-        name="guardian_id"
-        value={formData.guardian_id}
-        onChange={handleChange}
-        variant="outlined"
-        fullWidth
-        type="number"
-      />
-      <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 2 }}>
-=======
         label="Email"
         name="email"
         value={formData.email}
@@ -147,6 +96,16 @@ function NewStaffDetailsForm({ staff, onSave, onClose }) {
         variant="outlined"
         fullWidth
       />
+      {/* <TextField
+        label="Password"  // Added Password field
+        name="password"
+        type="password"  // Use password type for security
+        value={formData.password}
+        onChange={handleChange}
+        variant="outlined"
+        fullWidth
+        required
+      /> */}
       <FormControl variant="outlined" fullWidth>
         <InputLabel id="role-label">Role</InputLabel>
         <Select
@@ -155,20 +114,19 @@ function NewStaffDetailsForm({ staff, onSave, onClose }) {
           value={formData.role}
           onChange={handleChange}
           label="Role"
+          required
         >
           <MenuItem value="Teacher">Teacher</MenuItem>
           <MenuItem value="Assistant">Assistant</MenuItem>
           <MenuItem value="Cook">Babysitter</MenuItem>
           <MenuItem value="Administrator">Administrator</MenuItem>
           <MenuItem value="Janitor">Janitor</MenuItem>
-          
         </Select>
       </FormControl>
       <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 2 }}>
         <Button onClick={onClose} color="primary">
           Cancel
         </Button>
->>>>>>> e758a5e6db78a870791a40e25785c0e73d9d45ba
         <Button type="submit" variant="contained" color="primary">
           Save
         </Button>
@@ -177,8 +135,4 @@ function NewStaffDetailsForm({ staff, onSave, onClose }) {
   );
 }
 
-<<<<<<< HEAD
-export default NewBabyDetailsForm;
-=======
 export default NewStaffDetailsForm;
->>>>>>> e758a5e6db78a870791a40e25785c0e73d9d45ba
