@@ -2,69 +2,58 @@ import React, { useState, useEffect } from 'react';
 import { TextField, Button, Box, Select, MenuItem, InputLabel, FormControl } from '@mui/material';
 import axios from 'axios';
 
-function NewBabyDetailsForm({ child, onSave, onClose }) {
+function NewStaffDetailsForm({ staff, onSave, onClose }) {
   const [formData, setFormData] = useState({
     id: 0,
-    address: '',
-    dob: '',
+    email: '',
     first_name: '',
     last_name: '',
-    guardian_id: '',
+    phone_number: '',
+    role: '',
   });
 
-  const [guardians, setGuardians] = useState([]);
-
   useEffect(() => {
-    // Fetch guardians data
-    axios.get('http://localhost:8080/guardian')
-      .then(response => {
-        setGuardians(response.data);
-      })
-      .catch(error => {
-        console.error('Error fetching guardians:', error);
-      });
-
-    if (child) {
+    if (staff) {
       setFormData({
-        id: child.id,
-        address: child.address,
-        dob: child.dob,
-        first_name: child.first_name,
-        last_name: child.last_name,
-        guardian_id: child.guardian_id,
+        id: staff.id,
+        email: staff.email || '',
+        first_name: staff.first_name || '',
+        last_name: staff.last_name || '',
+        phone_number: staff.phone_number || '',
+        role: staff.role || '',
       });
     }
-  }, [child]);
+  }, [staff]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({
       ...formData,
-      [name]: name === 'guardian_id' ? parseInt(value, 10) : value,
+      [name]: value,
     });
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const request = child
-      ? axios.put(`http://localhost:8080/child?childId=${child.id}`, formData)
-      : axios.post('http://localhost:8080/child', formData);
+    const request = staff
+      ? axios.put(`http://localhost:8080/staff?id=${formData.id}`, formData)
+      : axios.post('http://localhost:8080/staff', formData);
 
     request
       .then(response => {
-        console.log('Baby details saved:', response.data);
+        console.log('Staff details saved:', response.data);
         setFormData({
           id: 0,
-          address: '',
-          dob: '',
+          email: '',
           first_name: '',
           last_name: '',
-          guardian_id: '',
+          phone_number: '',
+          role: '',
         });
         onSave();
       })
       .catch(error => {
-        console.error('Error saving baby details:', error);
+        console.error('Error saving staff details:', error);
       });
   };
 
@@ -89,41 +78,36 @@ function NewBabyDetailsForm({ child, onSave, onClose }) {
         required
       />
       <TextField
-        label="Date of Birth"
-        name="dob"
-        value={formData.dob}
+        label="Email"
+        name="email"
+        value={formData.email}
         onChange={handleChange}
         variant="outlined"
         fullWidth
-        required
-        type="date"
-        InputLabelProps={{
-          shrink: true,
-        }}
       />
       <TextField
-        label="Address"
-        name="address"
-        value={formData.address}
+        label="Phone Number"
+        name="phone_number"
+        value={formData.phone_number}
         onChange={handleChange}
         variant="outlined"
         fullWidth
-        required
       />
-      <FormControl fullWidth variant="outlined" required>
-        <InputLabel id="guardian-label">Guardian</InputLabel>
+      <FormControl variant="outlined" fullWidth>
+        <InputLabel id="role-label">Role</InputLabel>
         <Select
-          labelId="guardian-label"
-          name="guardian_id"
-          value={formData.guardian_id}
+          labelId="role-label"
+          name="role"
+          value={formData.role}
           onChange={handleChange}
-          label="Guardian"
+          label="Role"
         >
-          {guardians.map((guardian) => (
-            <MenuItem key={guardian.id} value={guardian.id}>
-              {`ID: ${guardian.id} - ${guardian.first_name} ${guardian.last_name}`}
-            </MenuItem>
-          ))}
+          <MenuItem value="Teacher">Teacher</MenuItem>
+          <MenuItem value="Assistant">Assistant</MenuItem>
+          <MenuItem value="Cook">Babysitter</MenuItem>
+          <MenuItem value="Administrator">Administrator</MenuItem>
+          <MenuItem value="Janitor">Janitor</MenuItem>
+          
         </Select>
       </FormControl>
       <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 2 }}>
@@ -138,4 +122,4 @@ function NewBabyDetailsForm({ child, onSave, onClose }) {
   );
 }
 
-export default NewBabyDetailsForm;
+export default NewStaffDetailsForm;
