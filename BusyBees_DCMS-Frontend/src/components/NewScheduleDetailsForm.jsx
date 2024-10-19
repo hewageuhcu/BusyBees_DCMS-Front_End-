@@ -1,59 +1,41 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { TextField, Button, Box } from '@mui/material';
 import axios from 'axios';
 
-function NewGuardianDetailsForm({ guardian, onSave, onClose }) {
+function NewBabyDetailsForm() {
   const [formData, setFormData] = useState({
     id: 0,
     address: '',
-    email: '',
+    dob: '',
     first_name: '',
     last_name: '',
-    phone_number: '',
+    guardian_id: '',
   });
-
-  useEffect(() => {
-    if (guardian) {
-      setFormData({
-        id: guardian.id,
-        address: guardian.address,
-        email: guardian.email || '',
-        first_name: guardian.first_name || '',
-        last_name: guardian.last_name || '',
-        phone_number: guardian.phone_number || '',
-      });
-    }
-  }, [guardian]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({
       ...formData,
-      [name]: value,
+      [name]: name === 'guardian_id' ? parseInt(value, 10) : value,
     });
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const request = guardian
-      ? axios.put(`http://localhost:8080/guardian?id=${formData.id}`, formData)
-      : axios.post('http://localhost:8080/guardian', formData);
-
-    request
+    console.log('Submitting form data:', formData); // Log the form data
+    axios.post('http://localhost:8080/child', formData)
       .then(response => {
-        console.log('Guardian details saved:', response.data);
+        console.log('Baby details saved:', response.data);
         setFormData({
-          id: 0,
           address: '',
-          email: '',
+          dob: '',
           first_name: '',
           last_name: '',
-          phone_number: '',
+          guardian_id: '',
         });
-        onSave();
       })
       .catch(error => {
-        console.error('Error saving guardian details:', error);
+        console.error('Error saving baby details:', error);
       });
   };
 
@@ -78,20 +60,17 @@ function NewGuardianDetailsForm({ guardian, onSave, onClose }) {
         required
       />
       <TextField
-        label="Email"
-        name="email"
-        value={formData.email}
+        label="Date of Birth"
+        name="dob"
+        value={formData.dob}
         onChange={handleChange}
         variant="outlined"
         fullWidth
-      />
-      <TextField
-        label="Phone Number"
-        name="phone_number"
-        value={formData.phone_number}
-        onChange={handleChange}
-        variant="outlined"
-        fullWidth
+        required
+        type="date"
+        InputLabelProps={{
+          shrink: true,
+        }}
       />
       <TextField
         label="Address"
@@ -102,10 +81,16 @@ function NewGuardianDetailsForm({ guardian, onSave, onClose }) {
         fullWidth
         required
       />
+      <TextField
+        label="Guardian ID"
+        name="guardian_id"
+        value={formData.guardian_id}
+        onChange={handleChange}
+        variant="outlined"
+        fullWidth
+        type="number"
+      />
       <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 2 }}>
-        <Button onClick={onClose} color="primary">
-          Cancel
-        </Button>
         <Button type="submit" variant="contained" color="primary">
           Save
         </Button>
@@ -114,4 +99,4 @@ function NewGuardianDetailsForm({ guardian, onSave, onClose }) {
   );
 }
 
-export default NewGuardianDetailsForm;
+export default NewBabyDetailsForm;

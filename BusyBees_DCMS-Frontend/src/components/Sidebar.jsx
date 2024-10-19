@@ -1,14 +1,15 @@
 // src/components/Sidebar.jsx
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Drawer, List, ListItem, ListItemText, ListItemIcon, Divider, Typography, Avatar, Box } from '@mui/material';
+import { Drawer, List, ListItem, ListItemText, ListItemIcon, Divider, Typography, Avatar, Box, Button } from '@mui/material';
 import BabyIcon from '@mui/icons-material/ChildCare';
 import BabySitterIcon from '@mui/icons-material/Person';
 import HomeIcon from '@mui/icons-material/Home';
 import PersonIcon from '@mui/icons-material/Person';
 import ClassIcon from '@mui/icons-material/Class';
+import LogoutIcon from '@mui/icons-material/Logout';
 
-function Sidebar() {
+function Sidebar({ onLogout }) {  // Accept onLogout as a prop
   return (
     <Drawer
       variant="permanent"
@@ -27,7 +28,7 @@ function Sidebar() {
       }}
     >
       {/* Profile Section */}
-      <Box sx={{ textAlign: 'center', mb: 2 }}>
+      {/* <Box sx={{ textAlign: 'center', mb: 2 }}>
         <Avatar
           alt="User Profile"
           src="https://bootstrapdemos.adminmart.com/modernize/dist/assets/images/profile/user-1.jpg"
@@ -40,7 +41,7 @@ function Sidebar() {
           Admin
         </Typography>
       </Box>
-      <Divider />
+      <Divider /> */}
 
       {/* Sidebar Title */}
       <Typography
@@ -53,38 +54,95 @@ function Sidebar() {
       </Typography>
 
       <List>
-  <ListItem button component={Link} to="/dashboard" sx={{ '&:hover': { backgroundColor: '#e8f0fe' } }}>
-    <ListItemIcon>
-      <HomeIcon sx={{ color: '#1a73e8' }} />
-    </ListItemIcon>
-    <ListItemText primary="Home" primaryTypographyProps={{ fontWeight: 'bold' }} />
-  </ListItem>
-  <ListItem button component={Link} to="/babyDetails" sx={{ '&:hover': { backgroundColor: '#e8f0fe' } }}>
-    <ListItemIcon>
-      <BabyIcon sx={{ color: '#ff7043' }} />
-    </ListItemIcon>
-    <ListItemText primary="Babys" primaryTypographyProps={{ fontWeight: 'bold' }} />
-  </ListItem>
+        <List>
+          <ListItem
+            button
+            component={Link}
+            to="/dashboard"
+            sx={{
+              '&:hover': { backgroundColor: '#e1f5fe' },
+            }}
+          >
+            <ListItemIcon>
+              <HomeIcon sx={{ color: '#039be5' }} />
+            </ListItemIcon>
+            <ListItemText primary="Home" primaryTypographyProps={{ fontWeight: 'bold' }} />
+          </ListItem>
 
-  <ListItem button component={Link} to="/guardianDetails" sx={{ '&:hover': { backgroundColor: '#e8f0fe' } }}>
-    <ListItemIcon>
-      <PersonIcon sx={{ color: '#ff7043' }} />
-    </ListItemIcon>
-    <ListItemText primary="Guardians" primaryTypographyProps={{ fontWeight: 'bold' }} />
-  </ListItem>
-  <ListItem button component={Link} to="/classroomDetails" sx={{ '&:hover': { backgroundColor: '#e8f0fe' } }}>
-    <ListItemIcon>
-      <ClassIcon sx={{ color: '#43a047' }} />
-    </ListItemIcon>
-    <ListItemText primary="Classrooms" primaryTypographyProps={{ fontWeight: 'bold' }} />
-  </ListItem>
-  <ListItem button component={Link} to="/babySitterDetails" sx={{ '&:hover': { backgroundColor: '#e8f0fe' } }}>
-    <ListItemIcon>
-      <BabySitterIcon sx={{ color: '#43a047' }} />
-    </ListItemIcon>
-    <ListItemText primary="Staff" primaryTypographyProps={{ fontWeight: 'bold' }} />
-  </ListItem>
-</List>
+          <ListItem
+            button
+            component={Link}
+            to="/babyDetails"
+            sx={{
+              '&:hover': { backgroundColor: '#ffe0b2' },
+            }}
+          >
+            <ListItemIcon>
+              <BabyIcon sx={{ color: '#ff9800' }} />
+            </ListItemIcon>
+            <ListItemText primary="Babies" primaryTypographyProps={{ fontWeight: 'bold' }} />
+          </ListItem>
+
+          <ListItem
+            button
+            component={Link}
+            to="/guardianDetails"
+            sx={{
+              '&:hover': { backgroundColor: '#f8bbd0' },
+            }}
+          >
+            <ListItemIcon>
+              <PersonIcon sx={{ color: '#e91e63' }} />
+            </ListItemIcon>
+            <ListItemText primary="Guardians" primaryTypographyProps={{ fontWeight: 'bold' }} />
+          </ListItem>
+
+          <ListItem
+            button
+            component={Link}
+            to="/classroomDetails"
+            sx={{
+              '&:hover': { backgroundColor: '#dcedc8' },
+            }}
+          >
+            <ListItemIcon>
+              <ClassIcon sx={{ color: '#4caf50' }} />
+            </ListItemIcon>
+            <ListItemText primary="Classrooms" primaryTypographyProps={{ fontWeight: 'bold' }} />
+          </ListItem>
+
+          <ListItem
+            button
+            component={Link}
+            to="/babySitterDetails"
+            sx={{
+              '&:hover': { backgroundColor: '#c5cae9' },
+            }}
+          >
+            <ListItemIcon>
+              <BabySitterIcon sx={{ color: '#673ab7' }} />
+            </ListItemIcon>
+            <ListItemText primary="Staff" primaryTypographyProps={{ fontWeight: 'bold' }} />
+          </ListItem>
+
+          {/* Logout Button */}
+          <ListItem
+            button
+            onClick={onLogout}
+            sx={{
+              '&:hover': { backgroundColor: '#ffebee', cursor: 'pointer' },
+              mt: 'auto',
+            }}
+          >
+            <ListItemIcon>
+              <LogoutIcon sx={{ color: '#d32f2f' }} />
+            </ListItemIcon>
+            <ListItemText primary="Logout" primaryTypographyProps={{ fontWeight: 'bold', color: '#d32f2f' }} />
+          </ListItem>
+        </List>
+
+      </List>
+
       <Divider sx={{ marginTop: '20px' }} />
     </Drawer>
   );
