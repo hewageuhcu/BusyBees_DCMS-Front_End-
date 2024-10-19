@@ -13,7 +13,12 @@ import GuardianDetails from './pages/GuardianDetails';
 import ClassroomDetails from './pages/ClassroomDetails';
 
 function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(true);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  const handleLogout = () => {
+    setIsLoggedIn(false);
+    // Optionally, you can add any other cleanup or redirect logic here
+  };
 
   return (
     <Router>
@@ -22,7 +27,7 @@ function App() {
         <>
           <Header />
           <Box sx={{ display: 'flex', minHeight: '100vh' }}>
-            <Sidebar />
+            <Sidebar onLogout={handleLogout} /> {/* Pass handleLogout to Sidebar */}
             <Box
               component="main"
               sx={{ flexGrow: 1, bgcolor: 'background.default', p: 3, mt: 8 }}
@@ -30,8 +35,8 @@ function App() {
               <Routes>
                 <Route path="/dashboard" element={<Dashboard />} />
                 <Route path="/babyDetails" element={<BabyDetails />} />
-                <Route path='/guardianDetails' element={<GuardianDetails/>}/>
-                <Route path='/classroomDetails' element={<ClassroomDetails/>}/>
+                <Route path='/guardianDetails' element={<GuardianDetails />} />
+                <Route path='/classroomDetails' element={<ClassroomDetails />} />
                 <Route path="/babySitterDetails" element={<BabySitterDetails />} />
                 <Route path="*" element={<Navigate to="/dashboard" />} />
               </Routes>

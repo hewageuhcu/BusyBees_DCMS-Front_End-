@@ -10,6 +10,7 @@ function NewStaffDetailsForm({ staff, onSave, onClose }) {
     last_name: '',
     phone_number: '',
     role: '',
+    password: '',  // Added password field
   });
 
   useEffect(() => {
@@ -21,6 +22,7 @@ function NewStaffDetailsForm({ staff, onSave, onClose }) {
         last_name: staff.last_name || '',
         phone_number: staff.phone_number || '',
         role: staff.role || '',
+        password: '', // Reset password on edit
       });
     }
   }, [staff]);
@@ -49,6 +51,7 @@ function NewStaffDetailsForm({ staff, onSave, onClose }) {
           last_name: '',
           phone_number: '',
           role: '',
+          password: '', // Reset password field
         });
         onSave();
       })
@@ -93,6 +96,16 @@ function NewStaffDetailsForm({ staff, onSave, onClose }) {
         variant="outlined"
         fullWidth
       />
+      {/* <TextField
+        label="Password"  // Added Password field
+        name="password"
+        type="password"  // Use password type for security
+        value={formData.password}
+        onChange={handleChange}
+        variant="outlined"
+        fullWidth
+        required
+      /> */}
       <FormControl variant="outlined" fullWidth>
         <InputLabel id="role-label">Role</InputLabel>
         <Select
@@ -101,13 +114,13 @@ function NewStaffDetailsForm({ staff, onSave, onClose }) {
           value={formData.role}
           onChange={handleChange}
           label="Role"
+          required
         >
           <MenuItem value="Teacher">Teacher</MenuItem>
           <MenuItem value="Assistant">Assistant</MenuItem>
           <MenuItem value="Cook">Babysitter</MenuItem>
           <MenuItem value="Administrator">Administrator</MenuItem>
           <MenuItem value="Janitor">Janitor</MenuItem>
-          
         </Select>
       </FormControl>
       <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 2 }}>
