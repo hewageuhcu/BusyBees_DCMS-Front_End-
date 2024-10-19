@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
-import { TextField, Button, Box } from '@mui/material';
+import React, { useState, useEffect } from 'react';
+import { TextField, Button, Box, Select, MenuItem, InputLabel, FormControl } from '@mui/material';
 import axios from 'axios';
 
-function NewBabyDetailsForm() {
+function NewBabyDetailsForm({ child, onSave, onClose }) {
   const [formData, setFormData] = useState({
     id: 0,
     address: '',
@@ -11,6 +11,30 @@ function NewBabyDetailsForm() {
     last_name: '',
     guardian_id: '',
   });
+
+  const [guardians, setGuardians] = useState([]);
+
+  useEffect(() => {
+    // Fetch guardians data
+    axios.get('http://localhost:8080/guardian')
+      .then(response => {
+        setGuardians(response.data);
+      })
+      .catch(error => {
+        console.error('Error fetching guardians:', error);
+      });
+
+    if (child) {
+      setFormData({
+        id: child.id,
+        address: child.address,
+        dob: child.dob,
+        first_name: child.first_name,
+        last_name: child.last_name,
+        guardian_id: child.guardian_id,
+      });
+    }
+  }, [child]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -22,17 +46,22 @@ function NewBabyDetailsForm() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log('Submitting form data:', formData); // Log the form data
-    axios.post('http://localhost:8080/child', formData)
+    const request = child
+      ? axios.put(`http://localhost:8080/child?childId=${child.id}`, formData)
+      : axios.post('http://localhost:8080/child', formData);
+
+    request
       .then(response => {
         console.log('Baby details saved:', response.data);
         setFormData({
+          id: 0,
           address: '',
           dob: '',
           first_name: '',
           last_name: '',
           guardian_id: '',
         });
+        onSave();
       })
       .catch(error => {
         console.error('Error saving baby details:', error);
@@ -81,16 +110,26 @@ function NewBabyDetailsForm() {
         fullWidth
         required
       />
-      <TextField
-        label="Guardian ID"
-        name="guardian_id"
-        value={formData.guardian_id}
-        onChange={handleChange}
-        variant="outlined"
-        fullWidth
-        type="number"
-      />
+      <FormControl fullWidth variant="outlined" required>
+        <InputLabel id="guardian-label">Guardian</InputLabel>
+        <Select
+          labelId="guardian-label"
+          name="guardian_id"
+          value={formData.guardian_id}
+          onChange={handleChange}
+          label="Guardian"
+        >
+          {guardians.map((guardian) => (
+            <MenuItem key={guardian.id} value={guardian.id}>
+              {`ID: ${guardian.id} - ${guardian.first_name} ${guardian.last_name}`}
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
       <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 2 }}>
+        <Button onClick={onClose} color="primary">
+          Cancel
+        </Button>
         <Button type="submit" variant="contained" color="primary">
           Save
         </Button>

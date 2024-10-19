@@ -2,6 +2,7 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { Box, Typography, TextField, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, TableSortLabel, Button, Dialog, DialogTitle, DialogContent, DialogActions, IconButton } from '@mui/material';
 import { Edit as EditIcon, Delete as DeleteIcon } from '@mui/icons-material';
+import Swal from 'sweetalert2';
 import NewGuardianDetailsForm from '../components/NewGuardianDetailsForm';
 
 const GuardianDetails = () => {
@@ -46,6 +47,7 @@ const GuardianDetails = () => {
     setOpen(false);
     setSelectedGuardian(null);
   };
+<<<<<<< HEAD
 const handleDelete = (id) => {
   axios.delete(`http://localhost:8080/guardian?guardianId=${id}`)
     .then(() => {
@@ -55,6 +57,40 @@ const handleDelete = (id) => {
       console.error('Error deleting guardian:', error);
     });
 };
+=======
+
+  const handleDelete = (id) => {
+    Swal.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, delete it!'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        axios.delete(`http://localhost:8080/Guardian?id=${id}`)
+          .then(() => {
+            fetchGuardians();
+            Swal.fire(
+              'Deleted!',
+              'The guardian has been deleted.',
+              'success'
+            );
+          })
+          .catch(error => {
+            console.error('Error deleting guardian:', error);
+            Swal.fire(
+              'Error!',
+              'There was an error deleting the guardian.',
+              'error'
+            );
+          });
+      }
+    });
+  };
+>>>>>>> e758a5e6db78a870791a40e25785c0e73d9d45ba
 
   const handleSave = () => {
     fetchGuardians();
@@ -62,7 +98,11 @@ const handleDelete = (id) => {
   };
 
   const filteredGuardians = guardians.filter((guardian) =>
+<<<<<<< HEAD
     guardian.first_name.toLowerCase().includes(filterName.toLowerCase())
+=======
+    guardian.first_name?.toLowerCase().includes(filterName.toLowerCase())
+>>>>>>> e758a5e6db78a870791a40e25785c0e73d9d45ba
   );
 
   return (
@@ -120,7 +160,12 @@ const handleDelete = (id) => {
                   Last Name
                 </TableSortLabel>
               </TableCell>
+<<<<<<< HEAD
               <TableCell>Date of Birth</TableCell>
+=======
+              <TableCell>Email</TableCell>
+              <TableCell>Phone Number</TableCell>
+>>>>>>> e758a5e6db78a870791a40e25785c0e73d9d45ba
               <TableCell>Address</TableCell>
               <TableCell>Actions</TableCell>
             </TableRow>
@@ -129,11 +174,19 @@ const handleDelete = (id) => {
             {filteredGuardians.map((guardian) => (
               <TableRow key={guardian.id} hover>
                 <TableCell>{guardian.id}</TableCell>
+<<<<<<< HEAD
                 <TableCell>{guardian.address}</TableCell>
                 <TableCell>{guardian.email}</TableCell>
                 <TableCell>{guardian.first_name}</TableCell>
                 <TableCell>{guardian.last_name}</TableCell>
                 <TableCell>{guardian.phone_number}</TableCell>
+=======
+                <TableCell>{guardian.first_name}</TableCell>
+                <TableCell>{guardian.last_name}</TableCell>
+                <TableCell>{guardian.email}</TableCell>
+                <TableCell>{guardian.phone_number}</TableCell>
+                <TableCell>{guardian.address}</TableCell>
+>>>>>>> e758a5e6db78a870791a40e25785c0e73d9d45ba
                 <TableCell>
                   <IconButton onClick={() => handleClickOpen(guardian)} color="primary">
                     <EditIcon />
@@ -151,12 +204,19 @@ const handleDelete = (id) => {
       <Dialog open={open} onClose={handleClose} maxWidth="sm" fullWidth>
         <DialogTitle>{selectedGuardian ? 'Edit Guardian Details' : 'Add New Guardian Details'}</DialogTitle>
         <DialogContent>
+<<<<<<< HEAD
           <NewGuardianDetailsForm guardian={selectedGuardian} onSave={handleSave} />
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose} color="primary">
             Cancel
           </Button>
+=======
+          <NewGuardianDetailsForm guardian={selectedGuardian} onSave={handleSave} onClose={handleClose} />
+        </DialogContent>
+        <DialogActions>
+       
+>>>>>>> e758a5e6db78a870791a40e25785c0e73d9d45ba
         </DialogActions>
       </Dialog>
     </Box>

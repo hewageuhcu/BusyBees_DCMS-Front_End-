@@ -1,27 +1,45 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { TextField, Button, Box } from '@mui/material';
 import axios from 'axios';
 
-function NewBabyDetailsForm() {
+function NewGuardianDetailsForm({ guardian, onSave, onClose }) {
   const [formData, setFormData] = useState({
     id: 0,
     address: '',
-    dob: '',
+    email: '',
     first_name: '',
     last_name: '',
-    guardian_id: '',
+    phone_number: '',
   });
+
+  useEffect(() => {
+    if (guardian) {
+      setFormData({
+        id: guardian.id,
+        address: guardian.address,
+        email: guardian.email || '',
+        first_name: guardian.first_name || '',
+        last_name: guardian.last_name || '',
+        phone_number: guardian.phone_number || '',
+      });
+    }
+  }, [guardian]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({
       ...formData,
+<<<<<<< HEAD
       [name]: name === 'guardian_id' ? parseInt(value, 10) : value,
+=======
+      [name]: value,
+>>>>>>> e758a5e6db78a870791a40e25785c0e73d9d45ba
     });
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
+<<<<<<< HEAD
     console.log('Submitting form data:', formData); // Log the form data
     axios.post('http://localhost:8080/child', formData)
       .then(response => {
@@ -36,6 +54,27 @@ function NewBabyDetailsForm() {
       })
       .catch(error => {
         console.error('Error saving baby details:', error);
+=======
+    const request = guardian
+      ? axios.put(`http://localhost:8080/guardian?id=${formData.id}`, formData)
+      : axios.post('http://localhost:8080/guardian', formData);
+
+    request
+      .then(response => {
+        console.log('Guardian details saved:', response.data);
+        setFormData({
+          id: 0,
+          address: '',
+          email: '',
+          first_name: '',
+          last_name: '',
+          phone_number: '',
+        });
+        onSave();
+      })
+      .catch(error => {
+        console.error('Error saving guardian details:', error);
+>>>>>>> e758a5e6db78a870791a40e25785c0e73d9d45ba
       });
   };
 
@@ -60,6 +99,7 @@ function NewBabyDetailsForm() {
         required
       />
       <TextField
+<<<<<<< HEAD
         label="Date of Birth"
         name="dob"
         value={formData.dob}
@@ -71,6 +111,22 @@ function NewBabyDetailsForm() {
         InputLabelProps={{
           shrink: true,
         }}
+=======
+        label="Email"
+        name="email"
+        value={formData.email}
+        onChange={handleChange}
+        variant="outlined"
+        fullWidth
+      />
+      <TextField
+        label="Phone Number"
+        name="phone_number"
+        value={formData.phone_number}
+        onChange={handleChange}
+        variant="outlined"
+        fullWidth
+>>>>>>> e758a5e6db78a870791a40e25785c0e73d9d45ba
       />
       <TextField
         label="Address"
@@ -81,6 +137,7 @@ function NewBabyDetailsForm() {
         fullWidth
         required
       />
+<<<<<<< HEAD
       <TextField
         label="Guardian ID"
         name="guardian_id"
@@ -91,6 +148,12 @@ function NewBabyDetailsForm() {
         type="number"
       />
       <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 2 }}>
+=======
+      <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 2 }}>
+        <Button onClick={onClose} color="primary">
+          Cancel
+        </Button>
+>>>>>>> e758a5e6db78a870791a40e25785c0e73d9d45ba
         <Button type="submit" variant="contained" color="primary">
           Save
         </Button>
@@ -99,4 +162,8 @@ function NewBabyDetailsForm() {
   );
 }
 
+<<<<<<< HEAD
 export default NewBabyDetailsForm;
+=======
+export default NewGuardianDetailsForm;
+>>>>>>> e758a5e6db78a870791a40e25785c0e73d9d45ba

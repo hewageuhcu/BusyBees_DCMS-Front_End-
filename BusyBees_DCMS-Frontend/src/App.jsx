@@ -1,4 +1,3 @@
-// src/App.jsx
 import { useState } from 'react';
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import { CssBaseline, Box } from '@mui/material';
@@ -11,6 +10,8 @@ import ScheduleDetails from './pages/ScheduleDetails';
 import Dashboard from './pages/Dashboard';
 import LoginPage from './pages/LoginPage';
 import './App.css';
+import GuardianDetails from './pages/GuardianDetails';
+import ClassroomDetails from './pages/ClassroomDetails';
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(true);
@@ -30,9 +31,9 @@ function App() {
               <Routes>
                 <Route path="/dashboard" element={<Dashboard />} />
                 <Route path="/babyDetails" element={<BabyDetails />} />
-                <Route path="/StaffDetails" element={<StaffDetails />} />
-                <Route path="/GuardianDetails" element={<GuardianDetails />} />
-                <Route path="/ScheduleDetails" element={<ScheduleDetails />} />
+                <Route path='/guardianDetails' element={<GuardianDetails/>}/>
+                <Route path='/classroomDetails' element={<ClassroomDetails/>}/>
+                <Route path="/babySitterDetails" element={<BabySitterDetails />} />
                 <Route path="*" element={<Navigate to="/dashboard" />} />
               </Routes>
             </Box>
