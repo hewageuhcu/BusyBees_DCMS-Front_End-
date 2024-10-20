@@ -13,7 +13,7 @@ import GuardianDetails from './pages/GuardianDetails';
 import ClassroomDetails from './pages/ClassroomDetails';
 
 function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(true);
 
   const handleLogout = () => {
     setIsLoggedIn(false);
